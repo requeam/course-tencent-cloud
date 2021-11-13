@@ -4,6 +4,7 @@
 
     {{ partial('macros/point') }}
 
+    {% set redeem_url = url({'for':'admin.point_redeem.list'}) %}
     {% set add_url = url({'for':'admin.point_gift.add'}) %}
     {% set search_url = url({'for':'admin.point_gift.search'}) %}
 
@@ -14,6 +15,9 @@
             </span>
         </div>
         <div class="kg-nav-right">
+            <a class="layui-btn layui-btn-sm" href="{{ redeem_url }}">
+                <i class="layui-icon layui-icon-log"></i>兑换记录
+            </a>
             <a class="layui-btn layui-btn-sm" href="{{ add_url }}">
                 <i class="layui-icon layui-icon-add-1"></i>添加礼品
             </a>
@@ -63,7 +67,7 @@
                 <td>{{ item.point }}</td>
                 <td>{{ item.stock }}</td>
                 <td>{{ item.redeem_limit }}</td>
-                <td><a class="layui-badge layui-bg-green" href="{{ redeem_url }}">{{ item.redeem_count }}</a></td>
+                <td>{{ item.redeem_count }}</td>
                 <td><input type="checkbox" name="published" value="1" lay-filter="published" lay-skin="switch" lay-text="是|否" data-url="{{ update_url }}" {% if item.published == 1 %}checked="checked"{% endif %}></td>
                 <td class="center">
                     <div class="kg-dropdown">
@@ -78,7 +82,9 @@
                             {% else %}
                                 <li><a href="javascript:" class="kg-restore" data-url="{{ restore_url }}">还原</a></li>
                             {% endif %}
-                            <li><a href="{{ redeem_url }}">兑换记录</a></li>
+                            {% if item.redeem_count > 0 %}
+                                <li><a href="{{ redeem_url }}">兑换记录</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </td>

@@ -25,21 +25,19 @@ class PointGift extends Service
     {
         $courseRepo = new CourseRepo();
 
-        $where = [
+        $items = $courseRepo->findAll([
             'free' => 0,
             'published' => 1,
             'deleted' => 0,
-        ];
+        ]);
 
-        $pager = $courseRepo->paginate($where, $sort = 'latest', 1, 10000);
-
-        if ($pager->total_items == 0) return [];
+        if ($items->count() == 0) return [];
 
         $result = [];
 
-        foreach ($pager->items as $item) {
+        foreach ($items as $item) {
             $result[] = [
-                'name' => sprintf('%s（¥%0.2f）', $item->title, $item->market_price),
+                'name' => sprintf('%s - %s（¥%0.2f）', $item->id, $item->title, $item->market_price),
                 'value' => $item->id,
             ];
         }

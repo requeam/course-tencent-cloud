@@ -32,6 +32,8 @@ class Refund extends Service
 
         $params = $pageQuery->getParams();
 
+        $params['deleted'] = $params['deleted'] ?? 0;
+
         /**
          * 兼容订单编号或订单序号查询
          */

@@ -532,6 +532,60 @@ $error['flash_sale.not_paid'] = '订单尚未完成，请前往用户中心支�
 $error['flash_sale.out_stock'] = '下手太慢，商品被秒光啦';
 
 /**
+ * 兑换码相关
+ */
+$error['redeem_code.not_found'] = '兑换码不存在';
+$error['redeem_code.remark_too_long'] = '备注信息太长（超过200字符）';
+$error['redeem_code.invalid_item_type'] = '无效的商品类型';
+$error['redeem_code.invalid_insert_count'] = '无效的生成数量（范围：1-100）';
+
+/**
+ * 优惠码相关
+ */
+$error['coupon.not_found'] = '优惠券不存在';
+$error['coupon.invalid_name'] = '无效的名称（2-30字符）';
+$error['coupon.invalid_type'] = '无效的优惠类型';
+$error['coupon.invalid_item_type'] = '无效的商品类型';
+$error['coupon.invalid_publish_status'] = '无效的发布状态';
+$error['coupon.invalid_start_time'] = '无效的开始时间';
+$error['coupon.invalid_end_time'] = '无效的结束时间';
+$error['coupon.start_gt_end'] = '开始时间大于结束时间';
+$error['coupon.invalid_issue_count'] = '无效的发行数量';
+$error['coupon.invalid_consume_limit'] = '无效的门槛限额';
+$error['coupon.invalid_apply_limit'] = '无效的申领限额';
+$error['coupon.invalid_deduct_amount'] = '无效的抵扣额度';
+$error['coupon.invalid_discount_rate'] = '无效的折扣率';
+$error['coupon.invalid_min_deduct_amount'] = '无效的最小抵扣额度';
+$error['coupon.invalid_max_deduct_amount'] = '无效的最大抵扣额度';
+$error['coupon.invalid_deduct_range'] = '无效的抵扣区间';
+
+/**
+ * 拼团相关
+ */
+$error['groupon.not_found'] = '优惠券不存在';
+$error['groupon.invalid_item_type'] = '无效的商品类型';
+$error['groupon.invalid_publish_status'] = '无效的发布状态';
+$error['groupon.invalid_start_time'] = '无效的开始时间';
+$error['groupon.invalid_end_time'] = '无效的结束时间';
+$error['groupon.start_gt_end'] = '开始时间大于结束时间';
+$error['groupon.invalid_partner_limit'] = '无效的开团人数（至少两人）';
+$error['groupon.invalid_member_price'] = '无效的团员价格';
+$error['groupon.invalid_leader_price'] = '无效的团长价格';
+$error['groupon.active_item_existed'] = '当前产品已经存在拼团活动';
+
+/**
+ * 分销相关
+ */
+$error['distribution.not_found'] = '优惠券不存在';
+$error['distribution.invalid_item_type'] = '无效的商品类型';
+$error['distribution.invalid_item_required'] = '请选择商品';
+$error['distribution.invalid_publish_status'] = '无效的发布状态';
+$error['distribution.invalid_start_time'] = '无效的开始时间';
+$error['distribution.invalid_end_time'] = '无效的结束时间';
+$error['distribution.start_gt_end'] = '开始时间大于结束时间';
+$error['distribution.invalid_com_rate'] = '无效的分成比例（范围：1-50%）';
+
+/**
  * 举报相关
  */
 $error['report.not_found'] = '举报不存在';

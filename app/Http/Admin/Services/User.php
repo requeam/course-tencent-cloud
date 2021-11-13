@@ -121,7 +121,7 @@ class User extends Service
             $user = new UserModel();
 
             $user->id = $account->id;
-            $user->name = "user_{$account->id}";
+            $user->name = "user:{$account->id}";
             $user->edu_role = $eduRole;
             $user->admin_role = $adminRole;
 
@@ -147,6 +147,14 @@ class User extends Service
         } catch (\Exception $e) {
 
             $this->db->rollback();
+
+            $logger = $this->getLogger();
+
+            $logger->error('Create User Error ' . kg_json_encode([
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'message' => $e->getMessage(),
+                ]));
 
             throw new \RuntimeException('sys.trans_rollback');
         }

@@ -117,4 +117,18 @@ class FlashSale extends Repository
             ->execute();
     }
 
+    /**
+     * @param int $itemId
+     * @param int $itemType
+     * @return FlashSaleModel|Model|bool
+     */
+    public function findItemFlashSale($itemId, $itemType)
+    {
+        return FlashSaleModel::findFirst([
+            'conditions' => 'item_id = ?1 AND item_type = ?2 AND deleted = 0',
+            'bind' => [1 => $itemId, 2 => $itemType],
+            'order' => 'id DESC',
+        ]);
+    }
+
 }

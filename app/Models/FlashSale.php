@@ -21,6 +21,48 @@ class FlashSale extends Model
     const ITEM_VIP = 3; // 会员
 
     /**
+     * 课程扩展信息
+     *
+     * @var array
+     */
+    protected $_course_info = [
+        'course' => [
+            'id' => 0,
+            'title' => '',
+            'cover' => '',
+            'market_price' => 0,
+        ]
+    ];
+
+    /**
+     * 套餐扩展信息
+     *
+     * @var array
+     */
+    protected $_package_info = [
+        'package' => [
+            'id' => 0,
+            'title' => '',
+            'cover' => '',
+            'market_price' => 0,
+        ]
+    ];
+
+    /**
+     * 会员扩展信息
+     *
+     * @var array
+     */
+    protected $_vip_info = [
+        'vip' => [
+            'id' => 0,
+            'title' => '',
+            'cover' => '',
+            'price' => 0,
+        ]
+    ];
+
+    /**
      * 主键编号
      *
      * @var int
@@ -130,6 +172,16 @@ class FlashSale extends Model
 
     public function beforeCreate()
     {
+        if (empty($this->item_info)) {
+            if ($this->item_type == self::ITEM_COURSE) {
+                $this->item_info = $this->_course_info;
+            } elseif ($this->item_type == self::ITEM_PACKAGE) {
+                $this->item_info = $this->_package_info;
+            } elseif ($this->item_type == self::ITEM_VIP) {
+                $this->item_info = $this->_vip_info;
+            }
+        }
+
         $this->create_time = time();
     }
 

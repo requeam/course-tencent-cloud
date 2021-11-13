@@ -36,6 +36,15 @@ class Order extends Service
 
         $params['deleted'] = $params['deleted'] ?? 0;
 
+        /**
+         * 兼容订单编号或订单序号查询
+         */
+        if (isset($params['id']) && strlen($params['id']) > 10) {
+            $orderRepo = new OrderRepo();
+            $order = $orderRepo->findBySn($params['id']);
+            $params['id'] = $order ? $order->id : -1000;
+        }
+
         $sort = $pageQuery->getSort();
         $page = $pageQuery->getPage();
         $limit = $pageQuery->getLimit();

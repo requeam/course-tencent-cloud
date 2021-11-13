@@ -13,9 +13,9 @@ use App\Library\Logger as AppLogger;
 use App\Traits\Auth as AuthTrait;
 use Phalcon\Config as PhConfig;
 use Phalcon\Logger\Adapter\File as PhLogger;
-use Phalcon\Mvc\User\Component;
+use Phalcon\Mvc\User\Component as UserComponent;
 
-class Service extends Component
+class Service extends UserComponent
 {
 
     use AuthTrait;

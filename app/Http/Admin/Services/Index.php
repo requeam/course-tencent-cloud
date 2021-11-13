@@ -10,11 +10,15 @@ namespace App\Http\Admin\Services;
 use App\Caches\AppInfo as AppInfoCache;
 use App\Caches\SiteGlobalStat as SiteGlobalStatCache;
 use App\Caches\SiteTodayStat as SiteTodayStatCache;
-use App\Library\AppInfo;
-use App\Library\Utils\ServerInfo;
+use App\Library\AppInfo as AppInfo;
+use App\Library\Utils\ServerInfo as ServerInfo;
 use App\Repos\Stat as StatRepo;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 
+/**
+ *
+ * @method array getLicenseInfo()
+ */
 class Index extends Service
 {
 
@@ -117,7 +121,7 @@ class Index extends Service
     {
         $url = 'https://koogua.com/api/releases';
 
-        $client = new Client();
+        $client = new HttpClient();
 
         $response = $client->get($url);
 

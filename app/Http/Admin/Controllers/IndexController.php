@@ -46,8 +46,10 @@ class IndexController extends Controller
         $todayStat = $indexService->getTodayStat();
         $modStat = $indexService->getModerationStat();
         $reportStat = $indexService->getReportStat();
+
         $appInfo = $indexService->getAppInfo();
         $serverInfo = $indexService->getServerInfo();
+        $licenseInfo = $indexService->getLicenseInfo();
 
         $this->view->setVar('global_stat', $globalStat);
         $this->view->setVar('today_stat', $todayStat);
@@ -55,6 +57,7 @@ class IndexController extends Controller
         $this->view->setVar('mod_stat', $modStat);
         $this->view->setVar('app_info', $appInfo);
         $this->view->setVar('server_info', $serverInfo);
+        $this->view->setVar('license_info', $licenseInfo);
     }
 
     /**

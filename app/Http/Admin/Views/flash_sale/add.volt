@@ -10,11 +10,12 @@
             <label class="layui-form-label">商品类型</label>
             <div class="layui-input-block">
                 {% for value,title in item_types %}
-                    <input type="radio" name="item_type" value="{{ value }}" title="{{ title }}" lay-filter="item_type">
+                    {% set checked = value == 1 ? 'checked="checked"' : '' %}
+                    <input type="radio" name="item_type" value="{{ value }}" title="{{ title }}" {{ checked }} lay-filter="item_type">
                 {% endfor %}
             </div>
         </div>
-        <div id="block-1" class="block" style="display:none;">
+        <div id="block-1" class="block" style="display:block;">
             <div class="layui-form-item">
                 <label class="layui-form-label">课程选择</label>
                 <div class="layui-input-block">

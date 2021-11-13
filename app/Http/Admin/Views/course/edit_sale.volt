@@ -1,7 +1,7 @@
 <form class="layui-form kg-form" method="POST" action="{{ url({'for':'admin.course.update','id':course.id}) }}">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">虚构订阅</label>
+            <label class="layui-form-label">虚拟订阅</label>
             <div class="layui-input-inline">
                 <input class="layui-input" type="text" name="fake_user_count" value="{{ course.fake_user_count }}" lay-verify="number">
             </div>

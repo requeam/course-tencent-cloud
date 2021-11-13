@@ -13,6 +13,7 @@
             <div class="layui-col-md4">
                 {{ partial('index/main_today_stat') }}
                 {{ partial('index/main_app_info') }}
+                {{ partial('index/main_license_info') }}
                 {{ partial('index/main_server_info') }}
                 {{ partial('index/main_team_info') }}
             </div>

@@ -8,7 +8,6 @@
 namespace App\Validators;
 
 use App\Exceptions\Forbidden as ForbiddenException;
-use App\Exceptions\ServiceUnavailable;
 use App\Exceptions\ServiceUnavailable as ServiceUnavailableException;
 use App\Exceptions\Unauthorized as UnauthorizedException;
 use App\Services\Service as AppService;

@@ -134,21 +134,37 @@ class FlashSale extends Service
 
         $validator = new FlashSaleValidator();
 
-        $post['item_type'] = $validator->checkItemType($post['item_type']);
+        $data = [];
+
+        $data['item_type'] = $validator->checkItemType($post['item_type']);
+
+        if ($post['item_type'] == FlashSaleModel::ITEM_COURSE) {
+
+            $course = $validator->checkCourse($post['xm_course_id']);
+
+            $data['item_id'] = $course->id;
+            $data['item_info'] = $this->getOriginCourseInfo($course);
+
+        } elseif ($post['item_type'] == FlashSaleModel::ITEM_PACKAGE) {
+
+            $package = $validator->checkPackage($post['xm_package_id']);
+
+            $data['item_id'] = $package->id;
+            $data['item_info'] = $this->getOriginPackageInfo($package);
+
+        } elseif ($post['item_type'] == FlashSaleModel::ITEM_VIP) {
+
+            $vip = $validator->checkVip($post['xm_vip_id']);
+
+            $data['item_id'] = $vip->id;
+            $data['item_info'] = $this->getOriginVipInfo($vip);
+        }
+
+        $validator->checkIfActiveItemExisted($data['item_id'], $data['item_type']);
 
         $sale = new FlashSaleModel();
 
-        switch ($post['item_type']) {
-            case FlashSaleModel::ITEM_COURSE:
-                $sale = $this->createCourseFlashSale($post);
-                break;
-            case FlashSaleModel::ITEM_PACKAGE:
-                $sale = $this->createPackageFlashSale($post);
-                break;
-            case FlashSaleModel::ITEM_VIP:
-                $sale = $this->createVipFlashSale($post);
-                break;
-        }
+        $sale->create($data);
 
         return $sale;
     }
@@ -159,13 +175,9 @@ class FlashSale extends Service
 
         $post = $this->request->getPost();
 
-        $originInfo = $this->getOriginInfo($sale->item_id, $sale->item_type);
-
         $validator = new FlashSaleValidator();
 
         $data = [];
-
-        $data['item_info'] = $originInfo['item_info'];
 
         if (isset($post['start_time']) && isset($post['end_time'])) {
             $data['start_time'] = $validator->checkStartTime($post['start_time']);
@@ -182,7 +194,7 @@ class FlashSale extends Service
         }
 
         if (isset($post['price'])) {
-            $data['price'] = $validator->checkPrice($originInfo['item_price'], $post['price']);
+            $data['price'] = $validator->checkPrice($post['price']);
         }
 
         if (isset($post['published'])) {
@@ -218,127 +230,41 @@ class FlashSale extends Service
         return $sale;
     }
 
-    protected function createCourseFlashSale($post)
+    protected function getOriginCourseInfo(CourseModel $course)
     {
-        $validator = new FlashSaleValidator();
-
-        $course = $validator->checkCourse($post['xm_course_id']);
-
-        $originInfo = $this->getOriginInfo($course->id, FlashSaleModel::ITEM_COURSE);
-
-        $sale = new FlashSaleModel();
-
-        $sale->item_id = $course->id;
-        $sale->item_type = FlashSaleModel::ITEM_COURSE;
-        $sale->item_info = $originInfo['item_info'];
-
-        $sale->create();
-
-        return $sale;
-    }
-
-    protected function createPackageFlashSale($post)
-    {
-        $validator = new FlashSaleValidator();
-
-        $package = $validator->checkPackage($post['xm_package_id']);
-
-        $originInfo = $this->getOriginInfo($package->id, FlashSaleModel::ITEM_PACKAGE);
-
-        $sale = new FlashSaleModel();
-
-        $sale->item_id = $package->id;
-        $sale->item_type = FlashSaleModel::ITEM_PACKAGE;
-        $sale->item_info = $originInfo['item_info'];
-
-        $sale->create();
-
-        return $sale;
-    }
-
-    protected function createVipFlashSale($post)
-    {
-        $validator = new FlashSaleValidator();
-
-        $vip = $validator->checkVip($post['xm_vip_id']);
-
-        $originInfo = $this->getOriginInfo($vip->id, FlashSaleModel::ITEM_VIP);
-
-        $sale = new FlashSaleModel();
-
-        $sale->item_id = $vip->id;
-        $sale->item_type = FlashSaleModel::ITEM_VIP;
-        $sale->item_info = $originInfo['item_info'];
-
-        $sale->create();
-
-        return $sale;
-    }
-
-    protected function getOriginInfo($itemId, $itemType)
-    {
-        $result = [
-            'item_info' => [],
-            'item_price' => 0.00,
+        return [
+            'course' => [
+                'id' => $course->id,
+                'title' => $course->title,
+                'cover' => CourseModel::getCoverPath($course->cover),
+                'market_price' => $course->market_price,
+            ]
         ];
+    }
 
-        if ($itemType == FlashSaleModel::ITEM_COURSE) {
+    protected function getOriginPackageInfo(PackageModel $package)
+    {
+        return [
+            'package' => [
+                'id' => $package->id,
+                'title' => $package->title,
+                'cover' => PackageModel::getCoverPath($package->cover),
+                'market_price' => $package->market_price,
+            ]
+        ];
+    }
 
-            $courseRepo = new CourseRepo();
-
-            $course = $courseRepo->findById($itemId);
-
-            $result = [
-                'item_info' => [
-                    'course' => [
-                        'id' => $course->id,
-                        'title' => $course->title,
-                        'cover' => CourseModel::getCoverPath($course->cover),
-                        'market_price' => $course->market_price,
-                    ],
-                ],
-                'item_price' => $course->market_price,
-            ];
-
-        } elseif ($itemType == FlashSaleModel::ITEM_PACKAGE) {
-
-            $packageRepo = new PackageRepo();
-
-            $package = $packageRepo->findById($itemId);
-
-            $result = [
-                'item_info' => [
-                    'package' => [
-                        'id' => $package->id,
-                        'title' => $package->title,
-                        'cover' => PackageModel::getCoverPath($package->cover),
-                        'market_price' => $package->market_price,
-                    ],
-                ],
-                'item_price' => $package->market_price,
-            ];
-
-        } elseif ($itemType == FlashSaleModel::ITEM_VIP) {
-
-            $vipRepo = new VipRepo();
-
-            $vip = $vipRepo->findById($itemId);
-
-            $result = [
-                'item_info' => [
-                    'vip' => [
-                        'id' => $vip->id,
-                        'title' => $vip->title,
-                        'cover' => VipModel::getCoverPath($vip->cover),
-                        'expiry' => $vip->expiry,
-                        'price' => $vip->price,
-                    ],
-                ],
-                'item_price' => $vip->price,
-            ];
-        }
-
-        return $result;
+    protected function getOriginVipInfo(VipModel $vip)
+    {
+        return [
+            'vip' => [
+                'id' => $vip->id,
+                'title' => $vip->title,
+                'cover' => VipModel::getCoverPath($vip->cover),
+                'expiry' => $vip->expiry,
+                'price' => $vip->price,
+            ]
+        ];
     }
 
     protected function initFlashSaleQueue($id)

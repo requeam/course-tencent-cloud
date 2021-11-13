@@ -98,6 +98,33 @@
     text-align: center;
 }
 
+.kg-license-wrap {
+    width: 600px;
+    margin: 100px auto;
+}
+
+.kg-license-wrap legend {
+    margin: 0 0 30px 0;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.kg-license-wrap .layui-form-item {
+    margin-bottom: 30px;
+}
+
+.kg-license-wrap .layui-input-block {
+    margin-left: 0;
+}
+
+.kg-license-wrap .layui-textarea {
+    min-height: 150px;
+}
+
+.kg-license-wrap .copyright {
+    text-align: center;
+}
+
 .kg-login-wrap {
     width: 500px;
     margin: 150px auto 100px;

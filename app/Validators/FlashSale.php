@@ -72,7 +72,7 @@ class FlashSale extends Validator
             throw new BadRequestException('flash_sale.invalid_item_type');
         }
 
-        return (int)$type;
+        return $type;
     }
 
     public function checkStartTime($startTime)
@@ -121,20 +121,16 @@ class FlashSale extends Validator
             throw new BadRequestException('flash_sale.invalid_stock');
         }
 
-        return (int)$value;
+        return $value;
     }
 
-    public function checkPrice($marketPrice, $salePrice)
+    public function checkPrice($price)
     {
-        if ($salePrice < 0.01) {
+        if ($price < 0.01) {
             throw new BadRequestException('flash_sale.invalid_price');
         }
 
-        if ($salePrice > $marketPrice) {
-            throw new BadRequestException('flash_sale.unreasonable_price');
-        }
-
-        return (float)$salePrice;
+        return $price;
     }
 
     public function checkPublishStatus($status)
@@ -143,7 +139,7 @@ class FlashSale extends Validator
             throw new BadRequestException('flash_sale.invalid_publish_status');
         }
 
-        return (int)$status;
+        return $status;
     }
 
     public function checkCourse($id)
@@ -165,6 +161,17 @@ class FlashSale extends Validator
         $validator = new Vip();
 
         return $validator->checkVip($id);
+    }
+
+    public function checkIfActiveItemExisted($itemId, $itemType)
+    {
+        $saleRepo = new FlashSaleRepo();
+
+        $sale = $saleRepo->findItemFlashSale($itemId, $itemType);
+
+        if ($sale && $sale->end_time > time()) {
+            throw new BadRequestException('flash_sale.active_item_existed');
+        }
     }
 
     public function checkIfExpired($endTime)

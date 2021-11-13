@@ -7,6 +7,8 @@
 
 namespace App\Http\Admin\Controllers;
 
+use App\Http\Admin\Services\License as LicenseService;
+use App\Library\AppInfo as AppInfo;
 use App\Traits\Response as ResponseTrait;
 
 /**
@@ -16,6 +18,32 @@ class PublicController extends \Phalcon\Mvc\Controller
 {
 
     use ResponseTrait;
+
+    /**
+     * @Route("/license", name="admin.license")
+     */
+    public function licenseAction()
+    {
+        if ($this->request->isPost()) {
+
+            $service = new LicenseService();
+
+            $service->saveLicence();
+
+            $location = $this->url->get(['for' => 'admin.login']);
+
+            $content = [
+                'location' => $location,
+                'msg' => '授权成功',
+            ];
+
+            return $this->jsonSuccess($content);
+        }
+
+        $appInfo = new AppInfo();
+
+        $this->view->setVar('app_info', $appInfo);
+    }
 
     /**
      * @Get("/auth", name="admin.auth")

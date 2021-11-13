@@ -65,7 +65,7 @@ class Register extends LogicService
             $user = new UserModel();
 
             $user->id = $account->id;
-            $user->name = "user_{$account->id}";
+            $user->name = "user:{$account->id}";
 
             if ($user->create() === false) {
                 throw new \RuntimeException('Create User Failed');
@@ -91,8 +91,8 @@ class Register extends LogicService
             $logger = $this->getLogger();
 
             $logger->error('Register Error ' . kg_json_encode([
+                    'file' => $e->getFile(),
                     'line' => $e->getLine(),
-                    'code' => $e->getCode(),
                     'message' => $e->getMessage(),
                 ]));
 

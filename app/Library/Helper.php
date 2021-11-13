@@ -59,6 +59,66 @@ function kg_ph_replace($str, $data = [])
 }
 
 /**
+ * 批量插入SQL
+ *
+ * @param string $table
+ * @param array $rows
+ * @return false|string
+ */
+function kg_batch_insert_sql($table, $rows = [])
+{
+    if (count($rows) == 0) return false;
+
+    $fields = implode(',', array_keys($rows[0]));
+
+    $values = [];
+
+    foreach ($rows as $row) {
+        $items = array_map(function ($item) {
+            return sprintf("'%s'", htmlspecialchars($item, ENT_QUOTES));
+        }, $row);
+        $values[] = sprintf('(%s)', implode(',', $items));
+    }
+
+    $values = implode(',', $values);
+
+    return sprintf("INSERT INTO %s (%s) VALUES %s", $table, $fields, $values);
+}
+
+/**
+ * 导出csv
+ *
+ * @param array $rows
+ * @param array $fields
+ * @param string $filename
+ */
+function kg_export_csv($rows, $fields = [], $filename = '')
+{
+    $filename = $filename ?: kg_uniqid();
+
+    header("Content-Type: text/csv");
+    header("Content-Disposition:filename={$filename}.csv");
+
+    $fp = fopen('php://output', 'w');
+
+    fwrite($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+    if ($fields) fputcsv($fp, $fields);
+
+    $index = 0;
+
+    foreach ($rows as $row) {
+        if ($index == 1000) {
+            $index = 0;
+            ob_flush();
+            flush();
+        }
+        $index++;
+        fputcsv($fp, $row);
+    }
+}
+
+/**
  * uniqid封装
  *
  * @param string $prefix
